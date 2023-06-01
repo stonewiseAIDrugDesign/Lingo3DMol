@@ -9,6 +9,10 @@ conda activate lingo3dmol
 ## Datasets
 We provide sample input for sampling under `\dataset` folder.
 
+## Model Checkpoints
+https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/contact.pkl
+https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/gen_mol.pkl
+https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/pretrain.pkl
 
 ## Sampling
 To inference using the model, run this code:
