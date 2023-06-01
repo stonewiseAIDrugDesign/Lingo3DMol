@@ -10,6 +10,7 @@ conda activate lingo3dmol
 We provide sample input for sampling under `\dataset` folder.
 
 ## Model Checkpoints
+Move checkpoint to the checkpoint folder.
 https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/contact.pkl
 https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/gen_mol.pkl
 https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/pretrain.pkl
@@ -21,5 +22,5 @@ cat {inference input} | python inference.py --cuda {cuda_id} --save_path {path}
 ```
 Example:
 ```
-cat datasets/sample_inference_list | python inference.py --cuda 0 --save_path output/
+cat datasets/sample_inference_list | python inference/inference.py --cuda 0 --save_path output/
 ```
