@@ -85,9 +85,9 @@ def validation(caption_contact, caption,testloader, testset, savedir):
 
                     model_contact_prob, model_contact_scaffold_prob = caption_contact(coords=coords,
                                     residue=residue, atom_type=atom_type, src_mask=mask, isTrain=False)
-                    if contact_prob is None:
+                    if len(contact_prob[0]) == 0:
                         contact_prob = model_contact_prob
-                    if contact_scaffold_prob is None:
+                    if len(contact_scaffold_prob[0]) == 0:
                         contact_scaffold_prob = model_contact_scaffold_prob
 
                     #print('contact_prob:', contact_prob, np.argwhere(contact_prob > 0))
@@ -197,7 +197,7 @@ def main(args):
         caption.eval()
 
 
-        cases = [casex]
+        cases = [case]
         name = case.split('/')[-1]
         print(f'{i} {case} .........................................................')
         savedir = os.path.join(savepath, name)

@@ -43,12 +43,12 @@ class mydataset(data.Dataset):
                 if np.sum(contact) > 0:
                     contact = torch.FloatTensor(contact)
                 else:
-                    contact = None
+                    contact = torch.Tensor([])
 
                 if np.sum(contact_scaffold) > 0:
                     contact_scaffold = torch.FloatTensor(contact_scaffold)
                 else:
-                    contact_scaffold = None
+                    contact_scaffold = torch.Tensor([])
 
                 if np.min(new_coords) < 0 or np.max(new_coords) >= 240:
                     print(f'new coords out of scale {np.min(new_coords)} {np.max(new_coords)}')
