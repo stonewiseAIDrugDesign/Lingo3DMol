@@ -41,6 +41,6 @@ cat datasets/dude_files | python inference/inference.py --cuda 0 --save_path out
 ```
 
 ## Expected output
-The output should be generated molecules in PDB format.
+The output should be generated molecules in mol format.
 
 ## License
