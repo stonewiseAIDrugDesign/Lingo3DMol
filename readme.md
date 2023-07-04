@@ -1,7 +1,18 @@
 # Lingo3DMol: Generation of a Pocket-based 3D Molecule using a Language Model
 Lingo3DMol is a pocket-based 3D molecule generation method that combines the ability of language model with the ability to generate 3D coordinates and geometric deep learning to produce high-quality molecules. 
 
+## System Requirements
+
+### Hardware requirements
+A standard compute with GPU with at least 5GB graphic memory.
+
+### OS Requirements
+This package is supported for macOS and Linux. The package has been tested on the following systems:
+Linux: Ubuntu 16.04
+macOS: Ventura (13.0)
+
 ## Install via conda yaml file
+Typical install time: 40 minutes
 ```
 conda create -n lingo3dmol python=3.8
 conda activate lingo3dmol
@@ -28,3 +39,8 @@ For example, to inference on DUD-E set run following code. :
 ```
 cat datasets/dude_files | python inference/inference.py --cuda 0 --save_path output/
 ```
+
+## Expected output
+The output should be generated molecules in PDB format.
+
+## License
