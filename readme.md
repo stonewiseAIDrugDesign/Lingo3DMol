@@ -3,11 +3,15 @@ Lingo3DMol is a pocket-based 3D molecule generation method that combines the abi
 
 ## Install via conda yaml file
 ```
-conda env create -f environment.yml
+conda create -n lingo3dmol python=3.8
 conda activate lingo3dmol
+conda install pytorch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 cudatoolkit=11.3 -c pytorch -c conda-forge
+conda install rdkit  -c conda-forge
+conda install scipy
+conda install -c conda-forge tqdm
 ```
 ## Datasets
-We provide sample input for sampling under `\dataset` folder.
+We provide DUD-E pocket files for sampling under `\dataset` folder. Please Unzip`dude_pocket.zip`.
 
 ## Model Checkpoints
 Move checkpoint to the checkpoint folder.
@@ -20,7 +24,7 @@ To inference using the model, run this code:
 ```
 cat {inference input} | python inference.py --cuda {cuda_id} --save_path {path}
 ```
-Example:
+For example, to inference on DUD-E set run following code. :
 ```
-cat datasets/sample_inference_list | python inference/inference.py --cuda 0 --save_path output/
+cat datasets/dude_files | python inference/inference.py --cuda 0 --save_path output/
 ```
