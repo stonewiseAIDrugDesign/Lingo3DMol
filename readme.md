@@ -4,7 +4,7 @@ Lingo3DMol is a pocket-based 3D molecule generation method that combines the abi
 ## System Requirements
 
 ### Hardware requirements
-A standard compute with GPU with at least 5GB graphic memory.
+A standard computer with GPU with at least 5GB graphic memory.
 
 ### OS Requirements
 This package is supported for macOS and Linux. The package has been tested on the following systems:
@@ -26,18 +26,16 @@ We provide DUD-E pocket files for sampling under `\dataset` folder. Please Unzip
 
 ## Model Checkpoints
 Move checkpoint to the checkpoint folder.
-https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/contact.pkl
-https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/gen_mol.pkl
-https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/pretrain.pkl
+https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/contact.pkl md5sum:6a9313726141fcf9201b9b9470dc2a7e
+
+https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/gen_mol.pkl md5sum:452bd401667184ae43c9818e5bdb133b
+
+https://stonewise-lingo3dmol-public.s3.cn-northwest-1.amazonaws.com.cn/pretrain.pkl md5sum:5d63db855c1922c836a78c3c7300f930
 
 ## Sampling
-To inference using the model, run this code:
+To inference using the model on DUD-E set, run this code:
 ```
-cat {inference input} | python inference.py --cuda {cuda_id} --save_path {path}
-```
-For example, to inference on DUD-E set run following code. :
-```
-cat datasets/dude_files | python inference/inference.py --cuda 0 --save_path output/
+sh run.sh
 ```
 
 ## Expected output

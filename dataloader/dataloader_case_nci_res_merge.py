@@ -14,7 +14,6 @@ import numpy as np
 import torch.utils.data as data
 import torch
 from rdkit import Chem
-from util.fragmol_frag_v0_2 import  FragmolUtil
 from util.pocket_code_all import PocketCode
 
 vocab = {'C': 1, 'N': 2, 'O': 3, 'S': 4, 'F': 5, 'Cl': 6, 'Br': 7, 'acc': 8, 'donor': 9}
@@ -30,7 +29,6 @@ class mydataset(data.Dataset):
             self.ncis.append(pktNciPath.strip())
             self.lgds.append(lgdPath.strip())
 
-        self.fragUtil = FragmolUtil()
         self.pocketCode = PocketCode()
 
     def __len__(self):
