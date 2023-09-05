@@ -26,7 +26,7 @@ from rdkit import RDLogger
 import time
 from model.transformer_v1_res_mp1 import topkp_random
 import argparse
-print('this is ed for wenzhang')
+
 RDLogger.DisableLog('rdApp.*')
 os.environ["CUDA_DEVICE_ORDER"] =    "PCI_BUS_ID"
 warnings.filterwarnings('ignore')
@@ -88,7 +88,7 @@ def changepos2(mol,center):
 
 def go_factory(factory_args,gudiecap,gudiepos,args):
     coords,residue,mask,atom_type,center,caption,contact_idx,contact_prob1,pattern,_ = factory_args
-    sample_num = args.sample_num
+    sample_num = args.gen_frag_set
     recon, pred_pos,cap_mask, Value_prob = caption(coords=coords, type=atom_type,
                     residue=residue, src_mask=mask,
                     critical_anchor=contact_prob1,
@@ -96,7 +96,7 @@ def go_factory(factory_args,gudiecap,gudiepos,args):
                     sample_num=sample_num, isTrain=args.isTrain, 
                     isMultiSample=args.isMultiSample,
                     USE_THRESHOLD=args.USE_THRESHOLD,
-                    isGuideSample=args.isGuideSample,guidepath=[np.tile(gudiecap,(args.sample_num,1)),np.tile(gudiepos,(args.sample_num,1,1))],
+                    isGuideSample=args.isGuideSample,guidepath=[np.tile(gudiecap,(args.gen_frag_set,1)),np.tile(gudiepos,(args.gen_frag_set,1,1))],
                     isDegreeSample=args.isDegreeSample,
                     isDiverseSample=args.isDiverseSample,
                     start_this_step=(gudiecap>0).sum(),
@@ -174,8 +174,8 @@ def get_partial_to_warehouse(frag_level,factory_args,partial_product,args):
     all_captions = all_captions[all_pos_indices]
     all_pos = all_pos[all_pos_indices]
 
-    all_captions = all_captions[:args.neednum]
-    all_pos = all_pos[:args.neednum]
+    all_captions = all_captions[:args.gen_frag_set//5]
+    all_pos = all_pos[:args.gen_frag_set//5]
 
     frag_new_cap = []
     frag_new_pos = []
@@ -257,8 +257,7 @@ def molecular_workflow(frag_level,warehouse,partial_product,fnames,factory_args,
 def validation(caption_contact,caption,testloader, testset, savedir, args):
     caption.eval()
     fnames = testset.fnames
-    sample_num = args.sample_num
-    epochs=args.epoch
+    sample_num = args.gen_frag_set
     resolution = 0.1
     length = int(24 / resolution)
     caption.eval()
@@ -269,7 +268,7 @@ def validation(caption_contact,caption,testloader, testset, savedir, args):
             coc = CollisionCheck(args.pocket_path_for_coc,args.coc_dis,center=center)
             break
     global all_good_nums
-    for e in range(epochs):
+    while True:
         for i, (coords, residue, atom_type, mask, center, 
             index, contact_prob, contact_scaffold_prob) in enumerate(testloader):
             with torch.no_grad():
@@ -306,7 +305,7 @@ def validation(caption_contact,caption,testloader, testset, savedir, args):
                 contact_idx     = topkp_random(contact_prob, top_k=args.topk, top_p=0.9, thred=args.nci_choose_thred)
                 factory_args = [coords,residue,mask,atom_type,center,caption,contact_idx,contact_prob1,coc,contact_scaffold_prob1]
                 molecular_workflow(0,warehouse,[[],[]],fnames,factory_args,savedir,args)
-        if all_good_nums>args.gennums or time.time()-start_time>3600*args.runtime:
+        if all_good_nums>args.gennums or time.time()-start_time>3600*args.max_run_hours:
             break
 
 def get_pdb_files(ints):
@@ -371,31 +370,29 @@ if __name__=='__main__':
     parser.add_argument('--contact_path', type=str,default='checkpoint/contact.pkl')
     parser.add_argument('--caption_path', type=str,default='checkpoint/gen_mol.pkl')
     parser.add_argument('--cuda', type=str)
-    parser.add_argument('--coc_dis', type=float)
-    parser.add_argument('--nci_thrs', type=float)
-    parser.add_argument('--topk', type=int)
-    parser.add_argument('--runtime', type=int)
+    parser.add_argument('--coc_dis', type=float, default=2.5)
+    parser.add_argument('--nci_thrs', type=float, default=0.7)
+    parser.add_argument('--topk', type=int, default=5)
+    parser.add_argument('--max_run_hours', type=int)
     parser.add_argument('--gennums', type=int)
-    parser.add_argument('--nci_choose_thred', type=float)
+    parser.add_argument('--nci_choose_thred', type=float, default=0.0)
     parser.add_argument('--cuda_list', type=int,nargs='+')
     parser.add_argument('--input_list', type=str)
-    parser.add_argument('--saveMol', action='store_true')
+    parser.add_argument('--saveMol', action='store_true', default=True)
     parser.add_argument('--isTrain', action='store_true')
-    parser.add_argument('--USE_THRESHOLD', action='store_true')
-    parser.add_argument('--isMultiSample', action='store_true')
-    parser.add_argument('--isGuideSample', action='store_true')
+    parser.add_argument('--USE_THRESHOLD', action='store_true', default=True)
+    parser.add_argument('--isMultiSample', action='store_true', default=True)
+    parser.add_argument('--isGuideSample', action='store_true', default=True)
     parser.add_argument('--isDegreeSample', action='store_true')
     parser.add_argument('--isDiverseSample', action='store_true')
     parser.add_argument('--OnceMolGen', action='store_true')
-    parser.add_argument('--sample_num', type=int,default=1)
-    parser.add_argument('--prod_time', type=int,default=1)
-    parser.add_argument('--epoch', type=int,default=1)
-    parser.add_argument('--neednum', type=int)
-    parser.add_argument('--tempture', type=float)
-    parser.add_argument('--frag_len_add', type=int,default=0)
+    parser.add_argument('--gen_frag_set', type=int, default=1)
+    parser.add_argument('--prod_time', type=int, default=1)
+    parser.add_argument('--tempture', type=float, default=1.0)
+    parser.add_argument('--frag_len_add', type=int, default=0)
     args = parser.parse_args()
     import logging
-    if args.cuda == str(args.cuda_list[0]):
+    if args.cuda == str(args.cuda):
         logging.basicConfig(filename='logs.log', level=logging.INFO,
                         format='%(asctime)s - %(levelname)s - %(message)s')
         tz = pytz.timezone('Asia/Shanghai')    
@@ -404,7 +401,7 @@ if __name__=='__main__':
             logging.info('%s: %s', arg, value)
     main(args)
 
-    if args.cuda == str(args.cuda_list[0]):
+    if args.cuda == str(args.cuda):
         with open(args.save_time_path,'a') as f:
             f.write(args.savedir+','+str(time.time()-start)+'\n')
         print("alltime is",time.time()-start)
