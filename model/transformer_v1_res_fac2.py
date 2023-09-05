@@ -11,18 +11,14 @@ import torch.nn as nn
 import torch
 import torch.nn.functional as F
 import copy
-import math
 import numpy as np
-import time
 from copy import deepcopy
 from model.Module import MLP,MultiHeadedAttention,MultiHeadedAttention_att,MultiHeadedAttentionBias\
     ,PositionwiseFeedForward,PositionalEncoding,EncoderLayer,Encoder,DecoderLayerBias,DecoderBias,edge_vector,cdist
 from concurrent.futures import ThreadPoolExecutor,wait,ALL_COMPLETED
 from multiprocessing import Pool
-import threadpool
 from model.transformer_v1_res_mp1 import subsequent_mask,topkp_random,find_root_smi_cur,segment_coords,next_coords
-import matplotlib.pyplot as plt
-import threading
+
     
 class TransformerModel(nn.Module):
     def __init__(self, src_vocab_size=12, gt_vocab_size=76, dropout=0.1):
