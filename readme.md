@@ -36,8 +36,26 @@ To inference using the model on DUD-E set, run this code:
 sh run.sh
 ```
 
+
 ## Expected output
 The output should be generated molecules in mol format.
+
+
+## Main Parameters Help
+*  --coc_dis Define the collision distance with the pocket (A)
+*  --nci_thrs Define the threshold of the nci prediction model
+*  --topk Select top k nci 
+*  --max_run_hours Define the max run hours
+*  --gennums Define the minimum generation numbers
+*  --USE_THRESHOLD Define sampled only categories larger than expectation
+*  --isMultiSample Define sampled use multinomial
+*  --isGuideSample frag-based sampled use this definition
+*  --OnceMolGen no frag-based sample
+*  --gen_frag_set Define the number of collections generated, from which the top twenty percent is selected (batch size)
+*  --prod_time "go_factory()" func repeat time 
+*  --tempture "proj1" used Tsoftmax
+*  --frag_len_add Defines the minimum length of each generated fragment/ bigger fragments  faster generated
+
 
 ## License
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
