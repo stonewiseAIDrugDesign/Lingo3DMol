@@ -1,0 +1,9 @@
+*.pyc
+__pycache__/
+evaluate_datas/
+logs/
+*.swp
+*.ipynb_checkpoints/
+*.pkl
+*.pdb
+__MACOSX
