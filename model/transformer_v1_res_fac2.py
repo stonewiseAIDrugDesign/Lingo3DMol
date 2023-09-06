@@ -121,7 +121,7 @@ class TransformerModel(nn.Module):
                 captions=None,gt_coords=None, smi_map=None, smi_map_n1=None, 
                 smi_map_n2=None,isTrain=True, contact_idx=None, sample_num=1, max_sample_step=100, 
                 isMultiSample=False,USE_THRESHOLD=False,isGuideSample=False,guidepath=None,
-                isDegreeSample=False,isDiverseSample=True,start_this_step=0,OnceMolGen=False,frag_len=0,tempture=1.0):
+                start_this_step=0,OnceMolGen=False,frag_len=0,tempture=1.0):
 
         coords_emb       = self.coords_emb(coords)#这里编码对应的都是蛋白的原子参数饿位置参数，因此对应的都是encoder部分
 
@@ -360,11 +360,7 @@ class TransformerModel(nn.Module):
 
                     feature_degree = torch.cat((target_type, new_res, root_fea, root_root_fea,root_root_root_fea), dim=-1)
                     degree_pred = F.softmax(self.proj4_aux(feature_degree), dim=-1)
-                    if isDegreeSample:
-                        # print(111111111111111)
-                        degree1 = torch.multinomial(degree_pred.view(-1,degree_pred.size(-1)),1,).view(degree_pred.size(0),-1)
-                    else:
-                        degree1 = torch.max(degree_pred, dim=-1)[1]
+                    degree1 = torch.max(degree_pred, dim=-1)[1]
                     # degree1 = torch.max(degree_pred, dim=-1)[1]
                     degree = degree1[:, i - 1]
 

@@ -97,8 +97,6 @@ def go_factory(factory_args,gudiecap,gudiepos,args):
                     isMultiSample=args.isMultiSample,
                     USE_THRESHOLD=args.USE_THRESHOLD,
                     isGuideSample=args.isGuideSample,guidepath=[np.tile(gudiecap,(args.gen_frag_set,1)),np.tile(gudiepos,(args.gen_frag_set,1,1))],
-                    isDegreeSample=args.isDegreeSample,
-                    isDiverseSample=args.isDiverseSample,
                     start_this_step=(gudiecap>0).sum(),
                     OnceMolGen=args.OnceMolGen,frag_len=args.frag_len_add,tempture=args.tempture)
     captions = recon
@@ -302,7 +300,7 @@ def validation(caption_contact,caption,testloader, testset, savedir, args):
                 contact_prob    = contact_prob.masked_fill(src_mask_repeat == 0, 0)
                 contact_prob    = contact_prob.masked_fill(residue_mask == 0, 0)
                 contact_prob    = torch.softmax(contact_prob*5, dim=-1)
-                contact_idx     = topkp_random(contact_prob, top_k=args.topk, top_p=0.9, thred=args.nci_choose_thred)
+                contact_idx     = topkp_random(contact_prob, top_k=args.topk, top_p=0.9, thred=0.0)
                 factory_args = [coords,residue,mask,atom_type,center,caption,contact_idx,contact_prob1,coc,contact_scaffold_prob1]
                 molecular_workflow(0,warehouse,[[],[]],fnames,factory_args,savedir,args)
         if all_good_nums>args.gennums or time.time()-start_time>3600*args.max_run_hours:
@@ -375,7 +373,6 @@ if __name__=='__main__':
     parser.add_argument('--topk', type=int, default=5)
     parser.add_argument('--max_run_hours', type=int)
     parser.add_argument('--gennums', type=int)
-    parser.add_argument('--nci_choose_thred', type=float, default=0.0)
     parser.add_argument('--cuda_list', type=int,nargs='+')
     parser.add_argument('--input_list', type=str)
     parser.add_argument('--saveMol', action='store_true', default=True)
@@ -383,8 +380,6 @@ if __name__=='__main__':
     parser.add_argument('--USE_THRESHOLD', action='store_true', default=True)
     parser.add_argument('--isMultiSample', action='store_true', default=True)
     parser.add_argument('--isGuideSample', action='store_true', default=True)
-    parser.add_argument('--isDegreeSample', action='store_true')
-    parser.add_argument('--isDiverseSample', action='store_true')
     parser.add_argument('--OnceMolGen', action='store_true')
     parser.add_argument('--gen_frag_set', type=int, default=1)
     parser.add_argument('--prod_time', type=int, default=1)
