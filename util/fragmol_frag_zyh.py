@@ -248,8 +248,8 @@ class FragmolUtil():
                     new_t = t.split('_')[0]
 
                     if xchar == 2 or xchar== 0:
-                        res.append(deepcopy(csmile))
-                        csmile = ""
+                        # res.append(deepcopy(csmile))
+                        # csmile = ""
                         break
 
                     if xchar == 1:
@@ -282,7 +282,7 @@ class FragmolUtil():
 
             try:
                 if len(res) > 0:
-                    smi, m = self.mergeSmiles3D(res[:-1], pos_res[i])
+                    smi, m = self.mergeSmiles3D(res, pos_res[i])
                     reses.append(smi)
                     moleculars.append(m)
 
